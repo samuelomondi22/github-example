@@ -1,0 +1,156 @@
+import './index.css';
+importing css file into javascript. When Webpack builds your app it sees this css import and learns that index.js depends on index.css. Webpack includes it in bundled javascript sent to the browser
+className =  value becomes class attribute on the DOM node., also helps in css
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"> in .html file in <head> to provide link to javascript
+
+props
+are arguments to React functions. 
+This bit is passing a prop called name with a string value of Dave ie
+<Person name='Dave'/>
+
+className prop value of person
+<div className='person'/>
+
+in JSX if component has no children(content) the convention it can be self closing
+instead of <div></div> it can be <div/>
+
+the JS inside the braces must be expression and not statement
+ie
+*Math, concatenation ({7 + 5}, { firstName + lastName})
+*function calls({ this.getFullName(person)})
+*ternary operator({ name === 'Dave' ? 'me': 'not me'})
+*Boolean expressions({ isEnabled && 'enabled'})
+
+DONTS
+*define new variables with var 
+*use if,for,while,etc
+*Define functions with functions
+
+RECEIVING PROPS
+passed as first argument to a component function
+const Property = (props) => {} 
+function Property(props){}
+
+destructuring - makes props easier to work with. ie
+const Hello = ({name}) => {
+  <span>Hello, {name}</span>
+}
+you can read { name } as extract of the 'name' key from the object passed as first argument
+extracting multiple keys ie
+const Hello = ({firstName, lastName }) => {
+  <span>Hello, {firstName} {lastName} </span>
+}
+works outside function argument as well
+const Hello = (props) => {
+  const { name } = props;
+  <span>Hello, {name} </span>
+}
+
+MODIFYING PROPS
+props are read only , component that receive prop must not change them
+data flow is one way and can be passed down to children
+
+COMMUNICATING WITH PARENT COMPONENTS
+function HandleAction(event){
+  console.log('the child did' + event)
+}
+function Parent(){
+  return (
+    <child onAction={HandleAction}/>
+  )
+}
+child component receives a prop named onAction, which it calls whenever it needs to send up data or notify parent of event 
+
+PROPTYPES
+when you forget to pass in a props you get undefined , same way as an argument in a plain function
+PropTypes - enables you to declare certain props are optional or required and also what type of value the prop expects
+
+ie// installed automatically by create-react-app or npm i --save prop-types
+
+import PropTypes from 'prop-types'
+
+//({author, message, likes }) PropTypes are set on function itself
+function Comment({author, message, likes })
+return (
+  <div>
+  <div className='author'>
+  {author}
+  </div>
+  <div className='message'>
+  {message}
+  </div>
+  <div className='likes'>
+  {likes > 0 ? likes: 'no'}
+  </div>
+  </div>
+)
+Comment.PropTypes ={
+  message: PropTypes.string.isRequired,
+  author: PropTypes.string.isRequired,
+  likes: PropTypes.number
+}
+
+VALIDATORS
+PropTypes.arry
+PropTypes.bool
+PropTypes.func
+PropTypes.number
+PropTypes.object
+PropTypes.string
+
+//node is anything that can be rendered; numbers, strings, elements, array
+PropTypes.node
+//element is a  React element created with JSX or calling React.createElement
+
+PropTypes.instanceOf(specific class)
+
+//limit to specific value
+PropTypes.oneOf(['person' , 'place' ,1234])
+
+//validate props
+PropTypes.oneOfType([
+  PropTypes.string,
+  PropTypes.booloean
+])
+
+//validate its an array or object
+PropTypes.arrayOf(PropTypes.strings)
+PropTypes.objectOf(PropTypes.number)
+
+if PropTypes validators are not expressive you can build your own
+
+function customValidator(props, propName, componentName ){
+  if(props[propName].length !===3){
+    return new Error(
+      `invalid` + propName + `supplied to ` + componentName
+    )
+  }
+}
+const Cx`ustomTest = ({ myCustomProp }) => (
+  <span>
+  {myCustomProp}
+  </span>
+)
+
+
+KEY
+help underfy if an element is added, moved or removed
+<ul>
+  <li key="2015">Duke</li>
+  <li key="2016">Villanova</li>
+</ul>
+
+<ul>
+  <li key="2014">Connecticut</li>
+  <li key="2015">Duke</li>
+  <li key="2016">Villanova</li>
+</ul>
+
+Now React knows that the element with key '2014' is the new one, and the elements with the keys '2015' and '2016' have just moved.
+
+React uses it to tell components apart when reconciling differences during a re-render. 
+
+characteristics of key 
+stable - element should have same key regardless
+permanent - should change between renders
+unique - no same id to different element
